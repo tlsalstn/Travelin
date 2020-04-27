@@ -1,0 +1,37 @@
+.Menu {
+    border-right: 1px solid #cacaca;
+    width: 65px;
+    height: 100%;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    text-align: center;
+    ul {
+        padding: 0;
+        list-style: none;
+    }
+    button {
+        padding: 3px 0;
+        border: none;
+        width: 50%;
+        background-color: transparent;
+        outline: none;
+        &:hover {
+            cursor: pointer;
+        }
+        img {
+            width: 100%;
+        }
+    }
+    &-Top {
+        &-Title {
+            border-bottom: 1px solid #000;
+            padding: 10px 0;
+            span {
+                font-size: .8vw;
+                font-weight: bold;
+            }
+        }
+    }
+}
