@@ -1,5 +1,6 @@
 import React from 'react';
 import './Map.scss';
+import { inject, observer } from 'mobx-react';
 
 declare global {
     interface Window {
@@ -8,35 +9,30 @@ declare global {
 }
 
 interface Props {
-
+    store?: any;
 }
 
 interface State {
-    map: any
+
 }
 
+@inject("store")
+@observer
 class Map extends React.Component<Props, State> {
-    state: State = {
-        map: null
-    }
-
     componentDidMount() {
-        // const script = document.createElement("script");
-        // script.async = true;
-        // script.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=0057cb2434d4fcc5cc94e23b884ea30e";
-        // document.head.appendChild(script);
+        const { setMap } = this.props.store.MapStore;
 
         window.kakao.maps.load(() => {
             let container = document.getElementById("map");
+            let lat: number = 35.6632508239323;
+            let lng: number = 128.413618885714;
+
             let options = {
-                center: new window.kakao.maps.LatLng(35.6632508239323, 128.413618885714),
+                center: new window.kakao.maps.LatLng(lat, lng),
                 level: 3
             };
-            let map = new window.kakao.maps.Map(container, options);
 
-            this.setState({
-                map: map
-            });
+            setMap(new window.kakao.maps.Map(container, options));
         });
     }
 
