@@ -12,8 +12,6 @@ interface Result {
     meta: any;
 }
 
-let timer: number;
-
 class SearchInputStore {
     @observable state: State = {
         value: "",
@@ -33,13 +31,6 @@ class SearchInputStore {
         } else {
             this.state.isInputed = true;
         }
-
-        if(timer) {
-            clearTimeout(timer);
-        }
-        timer = setTimeout(() => {
-            this.searchKeyword(true);
-        }, 500) as any;
     }
 
     @action handleClickDelete = () => {
@@ -52,27 +43,22 @@ class SearchInputStore {
     }
     
     @action handleClickSearch = () => {
-        this.searchKeyword(false);
+        this.searchKeyword();
     }
 
     @action onKeyUp = (e: React.KeyboardEvent) => {
         if(e.keyCode === 13) {
-            this.searchKeyword(false);
+            this.searchKeyword();
         }
     }
 
     @action getLocation = (id: number) => {
+        console.log(id);
         return [this.result.documents[id].y, this.result.documents[id].x];
     }
 
-    searchKeyword = async (isPreview: boolean) => {
-        clearTimeout(timer);
-        let size;
-        if(isPreview) {
-            size = 5;
-        } else {
-            size = 10;
-        }
+    searchKeyword = async () => {
+        let size = 15;
 
         if(this.state.value === "") {
             this.result = {
@@ -91,11 +77,13 @@ class SearchInputStore {
                 },
                 params: {
                     query: this.state.value,
-                    size: size
+                    size: size,
+                    page: 1
                 }
             });
 
             this.result = result.data;
+            console.log(result);
         } catch(error) {
             console.log(error);
         }
