@@ -15,9 +15,14 @@ interface Markers {
 
 }
 
+interface PreviousMarker {
+    setMap?: any;
+}
+
 class MapStore {
     @observable map: Map = {};
     @observable markers: Array<Markers> = [];
+    previousMarker: PreviousMarker = {};
 
     @action setMap = (map: any) => {
         window.kakao.maps.event.addListener(map, 'click', (mouseEvent: any) => {
@@ -28,14 +33,21 @@ class MapStore {
     }
 
     @action setLocation = (latlng: [number, number]) => {
-        console.log(latlng);
         let position = new window.kakao.maps.LatLng(latlng[0], latlng[1]);
         this.map.panTo(position);
         this.map.setLevel(3, {animate: true});
-        this.addMarker(position);
+
+        if(Object.keys(this.previousMarker).length !== 0) {
+            this.previousMarker.setMap(null);
+        }
+        let marker = new window.kakao.maps.Marker({
+            map: this.map,
+            position: position
+        });
+        this.previousMarker = marker;
     }
 
-    @action addMarker = (position: [number, number]) => {
+    addMarker = (position: [number, number]) => {
         let marker = new window.kakao.maps.Marker({
             map: this.map,
             position: position
