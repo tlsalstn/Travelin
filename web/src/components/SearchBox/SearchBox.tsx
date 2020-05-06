@@ -23,11 +23,14 @@ const initState: State = {
 class SearchBox extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.resetState();
+        this.state = {
+            rsltsrch: false,
+            rcmmndwrd: false
+        }
     }
 
     resetState = () => {
-        this.state = initState;
+        this.setState(initState);
     }
 
     render() {
