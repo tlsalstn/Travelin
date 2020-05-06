@@ -1,6 +1,7 @@
 import React from 'react';
 import './Menu.scss';
 import SearchBox from '../SearchBox/SearchBox';
+import logo from '../../img/logo.jpg';
 
 interface Props {
 
@@ -12,7 +13,7 @@ interface State {
     directionBox: boolean;
 }
 
-interface ImageButton {
+interface Tool {
     name: string
     title: string
     src: string
@@ -27,7 +28,10 @@ const initState: State = {
 class Menu extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.state = initState;
+        this.state = {
+            searchBox: false,
+            directionBox: false
+        }
     }
 
     resetState() {
@@ -45,9 +49,17 @@ class Menu extends React.Component<Props, State> {
     render() {
         const { handleChangeComponenet } = this;
 
-        const ImageButton: React.FC<ImageButton> = ({ name, title, src, alt }) => {
+        const TopTool: React.FC<Tool> = ({ name, title, src, alt }) => {
             return (
-                <button onClick={() => handleChangeComponenet(name)} title={title}>
+                <button className="TopTool" onClick={() => handleChangeComponenet(name)} title={title}>
+                    <img src={src} alt={alt} />
+                </button>
+            );
+        }
+
+        const BotTool: React.FC<Tool> = ({ name, title, src, alt }) => {
+            return (
+                <button className="BotTool">
                     <img src={src} alt={alt} />
                 </button>
             );
@@ -57,15 +69,18 @@ class Menu extends React.Component<Props, State> {
             <div className="Menu">
                 <div className="Menu-Top">
                     <div className="Menu-Top-Title">
-                        <span>Travelin</span>
+                        <img src={logo} alt="logo" />
                     </div>
                     <div className="Menu-Top-Tools">
                         <ul>
                             <li>
-                                <ImageButton name={"searchBox"} title="검색" src={"https://img.icons8.com/ios-glyphs/60/000000/search.png"} alt={"search"} />
+                                <TopTool name={"searchBox"} title="검색" src={"https://img.icons8.com/ios-filled/50/000000/marker.png"} alt={"search"} />
                             </li>
                             <li>
-                                <ImageButton name={"directionBox"} title="길찾기" src={"https://img.icons8.com/wired/60/000000/waypoint-map.png"} alt={"direction"} />
+                                <TopTool name={"directionBox"} title="길찾기" src={"https://img.icons8.com/ios-filled/24/000000/arrow.png"} alt={"direction"} />
+                            </li>
+                            <li>
+                                <TopTool name={"course"} title="여행 코스" src={"https://img.icons8.com/ios-filled/50/000000/waypoint-map.png"} alt={"course"} />
                             </li>
                         </ul>
                     </div>
@@ -74,14 +89,10 @@ class Menu extends React.Component<Props, State> {
                     <div className="Menu-Bot-Tools">
                         <ul>
                             <li>
-                                <button>
-                                    <img src="https://img.icons8.com/ios-glyphs/60/000000/user--v1.png" alt="user" />
-                                </button>
+                                <BotTool name={"myPage"} title="마이페이지" src={"https://img.icons8.com/ios-glyphs/60/000000/user--v1.png"} alt={"myPage"} />
                             </li>
                             <li>
-                                <button>
-                                    <img src="https://img.icons8.com/android/60/000000/info.png" alt="info" />
-                                </button>
+                                <BotTool name={"info"} title="정보" src={"https://img.icons8.com/android/60/000000/info.png"} alt={"info"} />
                             </li>
                         </ul>
                     </div>
