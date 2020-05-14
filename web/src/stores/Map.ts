@@ -24,6 +24,7 @@ class MapStore {
     @observable markers: Array<Markers> = [];
     previousMarker: PreviousMarker = {};
 
+    // 맵 저장
     @action setMap = (map: any) => {
         window.kakao.maps.event.addListener(map, 'click', (mouseEvent: any) => {
             const latlng = mouseEvent.latLng;
@@ -32,6 +33,7 @@ class MapStore {
         this.map = map;
     }
 
+    // 마커 추가하기
     @action setLocation = (latlng: [number, number]) => {
         let position = new window.kakao.maps.LatLng(latlng[0], latlng[1]);
         this.map.panTo(position);
@@ -40,20 +42,13 @@ class MapStore {
         if(Object.keys(this.previousMarker).length !== 0) {
             this.previousMarker.setMap(null);
         }
+        
         let marker = new window.kakao.maps.Marker({
             map: this.map,
             position: position
         });
-        this.previousMarker = marker;
-    }
 
-    addMarker = (position: [number, number]) => {
-        let marker = new window.kakao.maps.Marker({
-            map: this.map,
-            position: position
-        });
-        console.log(marker);
-        this.markers.push(marker);
+        this.previousMarker = marker;
     }
 }
 

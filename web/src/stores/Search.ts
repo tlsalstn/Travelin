@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
+import { address } from '../config/Adrs.json';
 import { token } from '../config/token.json';
 
 interface State {
@@ -13,6 +14,8 @@ interface Result {
 }
 
 class SearchInputStore {
+    @observable location: String[] = [];
+
     @observable state: State = {
         value: "",
         isInputed: false
@@ -23,6 +26,7 @@ class SearchInputStore {
         meta: []
     };
 
+    // Input이 비었는지 체크
     @action handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.state.value = e.target.value;
 
@@ -33,6 +37,7 @@ class SearchInputStore {
         }
     }
 
+    // Input 초기화 버튼
     @action handleClickDelete = () => {
         this.state.value = "";
         this.state.isInputed = false;
@@ -52,11 +57,14 @@ class SearchInputStore {
         }
     }
 
+    // result의 id 값의 위치 얻기
     @action getLocation = (id: number) => {
         console.log(id);
+        this.location = [this.result.documents[id].y, this.result.documents[id].x];
         return [this.result.documents[id].y, this.result.documents[id].x];
     }
 
+    // kakao api 키워드 검색
     searchKeyword = async () => {
         let size = 15;
 
@@ -70,7 +78,7 @@ class SearchInputStore {
 
         try {
             const result = await axios({
-                url: "https://dapi.kakao.com/v2/local/search/keyword.json",
+                url: address.keyWrdSrch,
                 method: "GET",
                 headers: {
                     "Authorization": "KakaoAK " + token.kkorstapk
