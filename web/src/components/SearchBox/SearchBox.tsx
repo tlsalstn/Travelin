@@ -2,6 +2,7 @@ import React from 'react';
 import './SearchBox.scss';
 import { observer, inject } from 'mobx-react';
 import Rsltsrch from '../Rsltsrch/Rsltsrch';
+import Info from '../Info/Info';
 
 interface Props {
     isShow: boolean;
@@ -9,13 +10,7 @@ interface Props {
 }
 
 interface State {
-    rsltsrch: boolean;
-    rcmmndwrd: boolean;
-}
-
-const initState: State = {
-    rsltsrch: false,
-    rcmmndwrd: false
+    rsltOrInfo: boolean;
 }
 
 @inject("store")
@@ -24,14 +19,11 @@ class SearchBox extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            rsltsrch: false,
-            rcmmndwrd: false
-        }
+            rsltOrInfo: false
+        };
     }
 
-    resetState = () => {
-        this.setState(initState);
-    }
+
 
     render() {
         const { isShow } = this.props;
@@ -48,7 +40,7 @@ class SearchBox extends React.Component<Props, State> {
                         <img src={"https://img.icons8.com/ios-glyphs/60/000000/search.png"} alt="search" />
                     </button>
                 </div>
-                <Rsltsrch />
+                {this.state.rsltOrInfo ? <Info /> : <Rsltsrch />}
             </div>
         );
     }
