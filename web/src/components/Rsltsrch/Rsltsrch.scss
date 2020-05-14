@@ -1,0 +1,46 @@
+.Rsltsrch {
+    width: 100%;
+    height: 100%;
+    max-height: 750px;
+    background-color: #fff;
+    overflow-y: auto;
+    span {
+        line-height: 70px;
+    }
+    &-Card {
+        border-bottom: 1px solid #cacaca;
+        height: 70px;
+        &-Content {
+            display: flex;
+            justify-content: space-between;
+            &-Title {
+                padding: 5px 10px;
+                width: 70%;
+                text-align: left;
+                div {
+                    padding: 5px 0;
+                }
+                &-Name {
+                    font-size: 1.1em;
+                }
+                &-RoadName {
+                    font-size: 0.8em;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+            }
+            &-Sub {
+                width: 25%;
+                &-Category {
+                    color: rgba(0, 0, 0, 0.5);
+                    font-size: 0.7em;
+                    line-height: 70px;
+                }
+            }
+        }
+    }
+    &-PageNum {
+        position: fixed;
+    }
+}

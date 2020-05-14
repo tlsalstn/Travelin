@@ -1,0 +1,32 @@
+.SearchBox {
+    left: 85px;
+    margin: 20px 0;
+    border: 1px solid #cacaca;
+    width: 360px;
+    max-height: 100%;
+    background-color: #fff;
+    box-sizing: border-box;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    position: fixed;
+    z-index: 2;
+    &-Input {
+        border-bottom: 1px solid #cacaca;
+        width: 100%;
+        height: 45px;
+        display: flex;
+        input {
+            padding: 0 10px;
+            border: none;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            font-size: 2vh;
+            outline: none;
+        }
+        button {
+            padding: 0 5px;
+            max-width: 30px;
+            box-sizing: border-box;
+        }
+    }
+}
