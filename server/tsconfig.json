@@ -1,0 +1,24 @@
+{
+   "compilerOptions": {
+      "lib": [
+         "es5",
+         "es6"
+      ],
+      "target": "es2017",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "outDir": "./dist",
+      "strict": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "sourceMap": true
+   },
+   // 컴파일 할 파일
+   "include": [
+      "src/**/*"
+   ],
+   // 컴파일에서 제외할 파일
+   "exclude": [
+      "node_modules"
+   ]
+}
