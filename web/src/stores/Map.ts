@@ -1,55 +1,139 @@
 import { observable, action } from "mobx";
+import { ChangeEvent } from "react";
+import Axios from "axios";
+import { address } from "../config/adrs.json";
+import { token } from "../config/token.json";
 
 declare global {
     interface Window {
-        kakao: any;
+        google: any;
     }
 }
 
 interface Map {
-    panTo?: any;
-    setLevel?: any;
+    fitBounds?: any;
+    controls?: any;
+    addListener?: any;
+    getBounds?: any;
 }
 
-interface Markers {
+interface Waypoints {
+    location: string;
+    latlng: string;
+};
 
-}
-
-interface PreviousMarker {
-    setMap?: any;
-}
-
-class MapStore {
+export class MapStore {
     @observable map: Map = {};
-    @observable markers: Array<Markers> = [];
-    previousMarker: PreviousMarker = {};
+    @observable points: Waypoints[] = [
+        {
+            location: "",
+            latlng: ""
+        },
+        {
+            location: "",
+            latlng: ""
+        }
+    ];
 
-    // 맵 저장
-    @action setMap = (map: any) => {
-        window.kakao.maps.event.addListener(map, 'click', (mouseEvent: any) => {
-            const latlng = mouseEvent.latLng;
-            console.log(latlng.toString());
-        })
-        this.map = map;
+    initPoint: Waypoints = {
+        location: "",
+        latlng: ""
     }
 
-    // 마커 추가하기
-    @action setLocation = (latlng: [number, number]) => {
-        let position = new window.kakao.maps.LatLng(latlng[0], latlng[1]);
-        this.map.panTo(position);
-        this.map.setLevel(3, {animate: true});
+    setMap = (map: Map) => this.map = map;
 
-        if(Object.keys(this.previousMarker).length !== 0) {
-            this.previousMarker.setMap(null);
+    // 맵 생성
+    @action initMap = async (container: object) => {
+        window.onload = () => {
+            const center = { lat: 35.663232, lng: 128.413708 };
+            const option = {
+                zoom: 10,
+                center: center
+            }
+
+            const map = new window.google.maps.Map(container, option);
+
+            this.setMap(map);
         }
-        
-        let marker = new window.kakao.maps.Marker({
-            map: this.map,
-            position: position
-        });
+    }
 
-        this.previousMarker = marker;
+    // 길 생성
+    @action directions =  async(travelMode: string) => {
+        this.points.map((item, key) => this.getLocation(key, item.location));
+
+        if(this.points.length > 2) {
+            const test = this.points.slice(1, this.points.length - 1).map(item => {
+                return {
+                    location: item.location
+                }
+            });
+            console.log(test);
+            console.log(this.points);
+        }
+
+        const directionsService = new window.google.maps.DirectionsService();
+        const directionsRenderer = new window.google.maps.DirectionsRenderer();
+
+        directionsRenderer.setMap(this.map);
+
+        directionsService.route({
+            origin: this.points[0].location,
+            destination: this.points[this.points.length - 1].location,
+            waypoints: this.points.slice(1, this.points.length - 1).map(item => {
+                return {
+                    location: item.location
+                }
+            }),
+            travelMode: window.google.maps.DirectionsTravelMode.DRIVING
+        }, (response: object, status: string): void => {
+            if (status === "OK") {
+                directionsRenderer.setDirections(response);
+            } else {
+                alert("Cannot directions");
+            }
+        });
+    }
+
+    @action addInput = () => {
+        this.points.push(this.initPoint);
+    }
+
+    @action removeInput = (id: number) => {
+        if(this.points.length <= 2) {
+            this.points[id].location = "";
+            return;
+        }
+        this.points.splice(id, 1);
+    }
+
+    @action changeInput = (id: number, e: ChangeEvent<HTMLInputElement>) => {
+        this.points[id].location = e.target.value;
+    }
+
+    getLocation = async (id: number, input: string) => {
+        try {
+            const result: any = await Axios({
+                method: "GET",
+                url: address.localhost + "/places/findPlace",
+                params: {
+                    key: token.ip,
+                    input: input,
+                    inputtype: "textquery",
+                    fields: "geometry"
+                }
+            });
+
+            console.log(result);
+
+            if(result.data.status !== 200) {
+                return false;
+            }
+
+            console.log(result.data.geometry.location.lat + ', ' + result.data.geometry.location.lng);
+
+            this.points[id].latlng = result.data.geometry.location.lat + ", " + result.data.geometry.location.lng;
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
-
-export default new MapStore();
