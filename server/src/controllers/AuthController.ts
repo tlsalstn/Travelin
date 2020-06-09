@@ -6,44 +6,78 @@ import jwtSecret from "../config/jwtSecret";
 
 class AuthController {
     static register = async (req: Request, res: Response) => {
-        const reg = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
-        const { userId, password, name, nickName, email } = req.body;
-        
-        let user = new User();
-        user.userId = userId;
-        user.password = password;
-        user.name = name;
-        user.nickName = nickName;
-        user.email = email;
+        const { userId, password, name } = req.body;
+        const userRepogitory = getRepository(User);
+
+        if(!(userId && password && name )) {
+            const result = {
+                status: 400,
+                message: "Please enter all the information"
+            }
+
+            res.json(result);
+            return;
+        }
+
+        try {
+            const user = {
+                userId,
+                password,
+                name
+            }
+
+            await userRepogitory.save(user);
+            
+            const result = {
+                status: 200
+            }
+
+            res.json(result);
+        } catch (error) {
+            const result = {
+                status: 400,
+                message: "Duplicate id"
+            }
+
+            res.json(result);
+        }
     }
 
     static login = async (req: Request, res: Response) => {
-        const { id, password } = req.body;
+        const { userId, password } = req.body;
         const userRepogitory = getRepository(User);
 
-        if(!(id && password)) {
-            const message = "id 또는 password가 없습니다.";
-
+        if(!(userId && password)) {
             const result = {
                 status: 400,
-                message: message
+                message: "Please enter all the information"
             }
 
-            res.status(400).json(result);
+            res.json(result);
             return;
         }
             
         try {
-            const user = await userRepogitory.findOneOrFail({
+            const user = await userRepogitory.findOne({
                 where: [
-                    {userId: id, password: password}
+                    {userId: userId, password: password}
                 ]
             });
 
+            if(!user) {  
+                const result = {
+                    status: 401,
+                    message: "The id or password is incorrect"
+                }
+    
+                res.json(result);
+                return;
+            }
+
             const token = jwt.sign(
-                {userId: user.userId, name: user.name, nickName: user.nickName},
+                { userId: user.userId, name: user.name },
                 jwtSecret.code,
-                {expiresIn: "1h"}
+                { expiresIn: "1h" }
             );
 
             const result = {
@@ -53,18 +87,9 @@ class AuthController {
                 }
             }
 
-            res.status(200).json(result);
+            res.json(result);
         } catch (error) {
-            const message = "id 또는 password가 틀렸습니다.";
-
-            console.log(error.name);
-
-            const result = {
-                status: 401,
-                message: message
-            }
-
-            res.status(401).json(result);
+            console.log(error);
         }
     }
 }
