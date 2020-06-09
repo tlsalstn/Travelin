@@ -1,5 +1,5 @@
-import React from 'react';
-import MainContainer from '../containers/MainContainer/MainContainer';
+import React from "react";
+import MainContainer from "../containers/MainContainer/MainContainer";
 
 class MainPage extends React.Component {
     render() {
