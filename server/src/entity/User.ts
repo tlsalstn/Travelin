@@ -1,4 +1,6 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Notice } from "./Notice";
+import { Share } from "./Share";
 
 @Entity()
 export class User extends BaseEntity {
@@ -14,9 +16,12 @@ export class User extends BaseEntity {
     @Column()
     name!: string;
 
-    @Column({ unique: true })
-    nickName!: string;
+    @Column()
+    isAdmin!: boolean;
 
-    @Column({ unique: true })
-    email!: string;
+    @OneToMany(() => Notice, notice => notice.userId)
+    notices!: Notice[];
+
+    @OneToMany(() => Share, share => share.userId)
+    shares!: Share[];
 }

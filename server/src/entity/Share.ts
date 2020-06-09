@@ -2,7 +2,7 @@ import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColu
 import { User } from "./User";
 
 @Entity()
-export class Notice extends BaseEntity {
+export class Share extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number;
 
@@ -13,6 +13,9 @@ export class Notice extends BaseEntity {
     @Column()
     title!: string;
 
-    @Column()
+    @Column({ nullable: true })
     content!: string;
+
+    @Column('simple-json')
+    points!: string[];
 }
