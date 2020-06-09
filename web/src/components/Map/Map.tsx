@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 
 declare global {
     interface Window {
-        kakao: any
+        google: any
     }
 }
 
@@ -20,20 +20,10 @@ interface State {
 @observer
 class Map extends React.Component<Props, State> {
     componentDidMount() {
-        const { setMap } = this.props.store.MapStore;
+        const { initMap } = this.props.store.mapStore;
+        const container = document.getElementById("map");
 
-        window.kakao.maps.load(() => {
-            let container = document.getElementById("map");
-            let lat: number = 35.6632508239323;
-            let lng: number = 128.413618885714;
-
-            let options = {
-                center: new window.kakao.maps.LatLng(lat, lng),
-                level: 3
-            };
-
-            setMap(new window.kakao.maps.Map(container, options));
-        });
+        initMap(container);
     }
 
     render() {
