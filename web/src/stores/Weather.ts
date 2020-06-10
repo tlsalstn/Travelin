@@ -1,10 +1,9 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
-import { address } from '../config/Adrs.json';
+import { address } from '../config/adrs.json';
 import { token } from '../config/token.json';
-import Search from './Search';
 
-class Weather {
+export class WeatherStore {
     @observable result = [];
 
     // 공공데이터 날씨 예보 얻기
@@ -12,20 +11,20 @@ class Weather {
         const nxny = await this.transformLatlngToGrid("toXY", 35.6632508239323, 128.413618885714);
         console.log(nxny);
         try {
-            const result = await axios({
-                url: address.weather,
-                method: "GET",
-                params: {
-                    serviceKey: token.weather,
-                    pageNo: 1,
-                    base_date: this.getDate(),
-                    base_time: '0030',
-                    nx: nxny["x"],
-                    ny: nxny["y"]
-                }
-            });
+            // const result = await axios({
+            //     url: address.weather,
+            //     method: "GET",
+            //     params: {
+            //         serviceKey: token.weather,
+            //         pageNo: 1,
+            //         base_date: this.getDate(),
+            //         base_time: '0030',
+            //         nx: nxny["x"],
+            //         ny: nxny["y"]
+            //     }
+            // });
 
-            console.log(result);
+            // console.log(result);
         } catch (error) {
             console.log(error);
         }
@@ -114,5 +113,3 @@ class Weather {
         return rs;
     }
 }
-
-export default new Weather();
