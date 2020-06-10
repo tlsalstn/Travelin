@@ -2,7 +2,6 @@ import { observable, action } from "mobx";
 import { ChangeEvent } from "react";
 import Axios from "axios";
 import { address } from "../config/adrs.json";
-import { token } from "../config/token.json";
 
 declare global {
     interface Window {
@@ -15,68 +14,75 @@ interface Map {
     controls?: any;
     addListener?: any;
     getBounds?: any;
+    panTo?: any;
 }
 
 interface Waypoints {
     location: string;
-    latlng: string;
 };
 
 export class MapStore {
     @observable map: Map = {};
     @observable points: Waypoints[] = [
         {
-            location: "",
-            latlng: ""
+            location: ""
         },
         {
-            location: "",
-            latlng: ""
+            location: ""
         }
     ];
 
     initPoint: Waypoints = {
-        location: "",
-        latlng: ""
+        location: ""
     }
 
     setMap = (map: Map) => this.map = map;
 
+    directionsService: any;
+    directionsRenderer: any;
+    marker: any;
+
     // 맵 생성
-    @action initMap = async (container: object) => {
+    @action initMap = (container: object) => {
         window.onload = () => {
             const center = { lat: 35.663232, lng: 128.413708 };
             const option = {
                 zoom: 10,
-                center: center
+                center: center,
+                mapTypeControl: false
             }
 
             const map = new window.google.maps.Map(container, option);
 
             this.setMap(map);
+
+            this.directionsService = new window.google.maps.DirectionsService();
+            this.directionsRenderer = new window.google.maps.DirectionsRenderer();
+            this.directionsRenderer.setMap(this.map);
         }
     }
 
+    @action moveTo = (lat: number, lng: number) => {
+        this.map.panTo(new window.google.maps.LatLng(lat, lng));
+    }
+
+    @action addMarker = (lat: number, lng: number) => {
+        this.moveTo(lat, lng);
+
+        if(this.marker) this.marker.setMap(null);
+
+        this.marker = new window.google.maps.Marker({
+            position: {lat, lng},
+            map: this.map,
+            title: "Marker"
+        });
+    }
+
     // 길 생성
-    @action directions =  async(travelMode: string) => {
-        this.points.map((item, key) => this.getLocation(key, item.location));
+    @action directions = (travelMode: string) => {
+        this.directionsRenderer.setMap(this.map);
 
-        if(this.points.length > 2) {
-            const test = this.points.slice(1, this.points.length - 1).map(item => {
-                return {
-                    location: item.location
-                }
-            });
-            console.log(test);
-            console.log(this.points);
-        }
-
-        const directionsService = new window.google.maps.DirectionsService();
-        const directionsRenderer = new window.google.maps.DirectionsRenderer();
-
-        directionsRenderer.setMap(this.map);
-
-        directionsService.route({
+        this.directionsService.route({
             origin: this.points[0].location,
             destination: this.points[this.points.length - 1].location,
             waypoints: this.points.slice(1, this.points.length - 1).map(item => {
@@ -84,12 +90,13 @@ export class MapStore {
                     location: item.location
                 }
             }),
-            travelMode: window.google.maps.DirectionsTravelMode.DRIVING
+            travelMode: travelMode
         }, (response: object, status: string): void => {
+            console.log(response);
             if (status === "OK") {
-                directionsRenderer.setDirections(response);
+                this.directionsRenderer.setDirections(response);
             } else {
-                alert("Cannot directions");
+                alert("No way found");
             }
         });
     }
@@ -108,32 +115,5 @@ export class MapStore {
 
     @action changeInput = (id: number, e: ChangeEvent<HTMLInputElement>) => {
         this.points[id].location = e.target.value;
-    }
-
-    getLocation = async (id: number, input: string) => {
-        try {
-            const result: any = await Axios({
-                method: "GET",
-                url: address.localhost + "/places/findPlace",
-                params: {
-                    key: token.ip,
-                    input: input,
-                    inputtype: "textquery",
-                    fields: "geometry"
-                }
-            });
-
-            console.log(result);
-
-            if(result.data.status !== 200) {
-                return false;
-            }
-
-            console.log(result.data.geometry.location.lat + ', ' + result.data.geometry.location.lng);
-
-            this.points[id].latlng = result.data.geometry.location.lat + ", " + result.data.geometry.location.lng;
-        } catch (error) {
-            console.log(error);
-        }
     }
 }
