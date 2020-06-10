@@ -1,7 +1,7 @@
 import React from 'react';
 import './Menu.scss';
-// import SearchBox from '../SearchBox/SearchBox';
-import CourseBox from '../CourseBox/CourseBox';
+import SearchBox from '../SearchBox/SearchBox';
+import DirectionsBox from '../DirectionBox/DirectionBox';
 
 interface Props {
     store?: any;
@@ -31,8 +31,7 @@ class Menu extends React.Component<Props, State> {
         super(props);
         this.state = {
             searchBox: false,
-            directionBox: false,
-            courseBox: true
+            directionBox: false
         }
     }
 
@@ -41,11 +40,14 @@ class Menu extends React.Component<Props, State> {
     }
 
     openBox = async (name: string): Promise<void> => {
-        await this.reset();
-        this.setState({
-            ...this.state,
-            [name]: !this.state[name]
-        });
+        if (this.state[name] !== true) {
+            await this.reset();
+            this.setState({
+                [name]: !this.state[name]
+            });
+        } else {
+            await this.reset();
+        }
     }
 
     link = (name: string) => {
@@ -72,13 +74,10 @@ class Menu extends React.Component<Props, State> {
                     <div className="Menu-Top-Tools">
                         <ul>
                             <li>
-                                <Tool type="top" name={"searchBox"} title="검색" src={"https://img.icons8.com/ios-filled/50/000000/marker.png"} alt={"search"} />
+                                <Tool type="top" name={"searchBox"} title="Search" src={"https://img.icons8.com/ios-filled/50/000000/marker.png"} alt={"search"} />
                             </li>
                             <li>
-                                <Tool type="top" name={"directionBox"} title="길찾기" src={"https://img.icons8.com/ios-filled/50/000000/arrow.png"} alt={"direction"} />
-                            </li>
-                            <li>
-                                <Tool type="top" name={"courseBox"} title="여행 코스" src={"https://img.icons8.com/ios-filled/50/000000/waypoint-map.png"} alt={"course"} />
+                                <Tool type="top" name={"directionBox"} title="Directions" src={"https://img.icons8.com/ios-filled/50/000000/arrow.png"} alt={"direction"} />
                             </li>
                         </ul>
                     </div>
@@ -87,16 +86,19 @@ class Menu extends React.Component<Props, State> {
                     <div className="Menu-Bot-Tools">
                         <ul>
                             <li>
-                                <Tool type="bot" name={"mypage"} title="마이페이지" src={"https://img.icons8.com/ios-glyphs/60/000000/user--v1.png"} alt={"myPage"} />
+                                <Tool type="bot" name={"mypage"} title="My page" src={"https://img.icons8.com/ios-glyphs/60/000000/user--v1.png"} alt={"MyPage"} />
                             </li>
                             <li>
-                                <Tool type="bot" name={"info"} title="정보" src={"https://img.icons8.com/android/60/000000/info.png"} alt={"info"} />
+                                <Tool type="bot" name={"community"} title="Community" src={"https://img.icons8.com/material/60/000000/google-groups.png"} alt={"Comunity"} />
+                            </li>
+                            <li>
+                                <Tool type="bot" name={"info"} title="Info" src={"https://img.icons8.com/android/60/000000/info.png"} alt={"Info"} />
                             </li>
                         </ul>
                     </div>
                 </div>
-                {/* <SearchBox isShow={this.state.searchBox} /> */}
-                <CourseBox isShow={this.state.courseBox} />
+                <SearchBox isShow={this.state.searchBox} />
+                <DirectionsBox isShow={this.state.directionBox} />
             </div>
         );
     }
