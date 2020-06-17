@@ -1,5 +1,6 @@
 import React, { ChangeEvent } from "react";
 import "./Auth.scss";
+import { Link } from "react-router-dom";
 
 interface Props {
     id: string;
@@ -15,7 +16,9 @@ const Register: React.SFC<Props> = ({ id, password, name, nickName, email, handl
     const handleClick = async () => {
         const data = await register();
 
-        if(data.status === 200) {
+        if(data === undefined) {
+            alert("서버에 연결할 수 없습니다.");
+        } else if(data.status === 200) {
             alert("User creaeted");
             window.location.href = "/auth/login";
         } else {
@@ -27,7 +30,7 @@ const Register: React.SFC<Props> = ({ id, password, name, nickName, email, handl
         <div className="Form">
             <div className="Form-Content">
                 <div className="Form-Content-Title">
-                    <a href="/">SIGN UP</a>
+                    <Link to="/">SIGN UP</Link>
                 </div>
                 <input type="text" value={id} onChange={e => handleChange("id", e)} placeholder="ID" />
                 <input type="password" value={password} onChange={e => handleChange("password", e)} placeholder="PASSWORD" />

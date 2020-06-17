@@ -75,7 +75,7 @@ class AuthController {
             }
 
             const token = jwt.sign(
-                { userId: user.userId, name: user.name },
+                { id: user.id, userId: user.userId, name: user.name },
                 jwtSecret.code,
                 { expiresIn: "1h" }
             );

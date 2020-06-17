@@ -2,6 +2,7 @@ import React from 'react';
 import './Menu.scss';
 import SearchBox from '../SearchBox/SearchBox';
 import DirectionsBox from '../DirectionBox/DirectionBox';
+import { Link } from 'react-router-dom';
 
 interface Props {
     store?: any;
@@ -14,7 +15,6 @@ interface State {
 }
 
 interface Tool {
-    type: string;
     name: string
     title: string
     src: string
@@ -50,16 +50,12 @@ class Menu extends React.Component<Props, State> {
         }
     }
 
-    link = (name: string) => {
-        window.location.href = "/" + name;
-    }
-
     render() {
-        const { openBox, link } = this;
+        const { openBox } = this;
 
-        const Tool: React.SFC<Tool> = ({ type, name, title, src, alt }) => {
+        const Tool: React.SFC<Tool> = ({ name, title, src, alt }) => {
             return (
-                <button className="TopTool" onClick={() => type === "top" ? openBox(name) : link(name)} title={title}>
+                <button className="TopTool" onClick={() => openBox(name)} title={title}>
                     <img src={src} alt={alt} />
                 </button>
             );
@@ -74,10 +70,10 @@ class Menu extends React.Component<Props, State> {
                     <div className="Menu-Top-Tools">
                         <ul>
                             <li>
-                                <Tool type="top" name={"searchBox"} title="Search" src={"https://img.icons8.com/ios-filled/50/000000/marker.png"} alt={"search"} />
+                                <Tool name={"searchBox"} title="Search" src={"https://img.icons8.com/ios-filled/50/000000/marker.png"} alt={"search"} />
                             </li>
                             <li>
-                                <Tool type="top" name={"directionBox"} title="Directions" src={"https://img.icons8.com/ios-filled/50/000000/arrow.png"} alt={"direction"} />
+                                <Tool name={"directionBox"} title="Directions" src={"https://img.icons8.com/ios-filled/50/000000/arrow.png"} alt={"direction"} />
                             </li>
                         </ul>
                     </div>
@@ -86,13 +82,19 @@ class Menu extends React.Component<Props, State> {
                     <div className="Menu-Bot-Tools">
                         <ul>
                             <li>
-                                <Tool type="bot" name={"mypage"} title="My page" src={"https://img.icons8.com/ios-glyphs/60/000000/user--v1.png"} alt={"MyPage"} />
+                                <Link to={"/post/mypage"} title="My Page">
+                                    <img src={"https://img.icons8.com/ios-glyphs/60/000000/user--v1.png"} alt={"MyPage"} />
+                                </Link>
                             </li>
                             <li>
-                                <Tool type="bot" name={"community"} title="Community" src={"https://img.icons8.com/material/60/000000/google-groups.png"} alt={"Comunity"} />
+                                <Link to={"post/share"} title="Community">
+                                    <img src={"https://img.icons8.com/material/60/000000/google-groups.png"} alt={"Comunity"} />
+                                </Link>
                             </li>
                             <li>
-                                <Tool type="bot" name={"info"} title="Info" src={"https://img.icons8.com/android/60/000000/info.png"} alt={"Info"} />
+                                <Link to={"post/info"} title="Info">
+                                    <img src={"https://img.icons8.com/android/60/000000/info.png"} alt={"Info"} />
+                                </Link>
                             </li>
                         </ul>
                     </div>

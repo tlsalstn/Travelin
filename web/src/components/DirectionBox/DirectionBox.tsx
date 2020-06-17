@@ -29,15 +29,7 @@ class DirectionBox extends React.Component<Props, State> {
         const { isShow } = this.props;
         const { points, addInput, removeInput, changeInput, directions } = this.props.store.mapStore;
 
-        const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-            this.setState({
-                travelMode: e.currentTarget.value
-            });
-        }
-
-        const createPost = () => {
-            window.location.href = "/share";
-        }
+        const handleChange = (e: ChangeEvent<HTMLSelectElement>) => this.setState({travelMode: e.currentTarget.value});
 
         return (
             <div className="CourseBox" style={{ "display": isShow ? "block": "none" }}>
@@ -61,7 +53,6 @@ class DirectionBox extends React.Component<Props, State> {
                 </div>
                 <div className="CourseBox-Btn">
                     <button onClick={() => directions(this.state.travelMode)}>Make Course</button>
-                    <button onClick={() => createPost()}>Share the route</button>
                 </div>
             </div>
         );

@@ -1,7 +1,7 @@
 import React from 'react';
 import './SearchBox.scss';
 import { observer, inject } from 'mobx-react';
-import Rsltsrch from '../Rsltsrch/Rsltsrch';
+// import Rsltsrch from '../Rsltsrch/Rsltsrch';
 
 interface Props {
     store?: any;

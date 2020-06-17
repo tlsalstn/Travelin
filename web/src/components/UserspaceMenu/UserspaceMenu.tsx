@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const UserspaceMenu: React.SFC = () => {
     const logout = () => {
@@ -8,10 +9,10 @@ const UserspaceMenu: React.SFC = () => {
     return (
         <ul>
             <li>
-                <a href="/">MY PAGE</a>
+                <Link to="/">MY PAGE</Link>
             </li>
             <li>
-                <a href="/" onClick={() => logout()}>LOGOUT</a>
+                <Link to="/" onClick={() => logout()}>LOGOUT</Link>
             </li>
         </ul>
     );

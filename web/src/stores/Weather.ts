@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
-import axios from 'axios';
-import { address } from '../config/adrs.json';
-import { token } from '../config/token.json';
+// import axios from 'axios';
+// import { address } from '../config/adrs.json';
+// import { token } from '../config/token.json';
 
 export class WeatherStore {
     @observable result = [];

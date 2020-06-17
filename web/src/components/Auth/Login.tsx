@@ -1,5 +1,6 @@
 import React, { ChangeEvent } from "react";
 import "./Auth.scss";
+import { Link } from "react-router-dom";
 
 interface Props {
     id: string;
@@ -12,7 +13,9 @@ const Login: React.SFC<Props> = ({ id, password, handleChange, login }) => {
     const handleClick = async () => {
         const data = await login();
 
-        if(data.status === 200) {
+        if(data === undefined) {
+            alert("서버에 연결할 수 없습니다.");
+        } else if(data.status === 200) {
             localStorage.setItem("token", data.data.token);
             window.location.href = "/";
         } else {
@@ -24,7 +27,7 @@ const Login: React.SFC<Props> = ({ id, password, handleChange, login }) => {
         <div className="Form">
             <div className="Form-Content">
                 <div className="Form-Content-Title">
-                    <a href="/">Travelin</a>
+                    <Link to="/">Travelin</Link>
                 </div>
                 <input type="text" value={id} placeholder="ID" onChange={e => handleChange("id", e)} />
                 <input type="password" value={password} placeholder="PASSWORD" onChange={e => handleChange("password", e)} />

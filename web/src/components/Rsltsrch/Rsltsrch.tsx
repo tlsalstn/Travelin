@@ -14,13 +14,12 @@ interface State {
 @observer
 class RcmmdWrd extends React.Component<Props, State> {
     render() {
-        let { result, getLocation } = this.props.store.SearchInputStore;
-        let { setLocation } = this.props.store.MapStore;
+        let { result, getLocation } = this.props.store.searchInputStore;
+        let { setLocation } = this.props.store.mapStore;
 
         if (result.documents === undefined) {
             result.documents = [];
         }
-
 
         const clickCard = (key?: number) => {
             let location = getLocation(key);
@@ -35,7 +34,7 @@ class RcmmdWrd extends React.Component<Props, State> {
                         <div className="Rsltsrch-Card" onClick={() => clickCard(key)} key={key}>
                             <div className="Rsltsrch-Card-Content">
                                 <div className="Rsltsrch-Card-Content-Title">
-                                    <div className="Rsltsrch-Card-Content-Title-Name">
+                                    <div className="Rsltsrch-Card-Content-Title-Name" title={item.place_name}>
                                         {item.place_name}
                                     </div>
                                     <div className="Rsltsrch-Card-Content-Title-RoadName">
