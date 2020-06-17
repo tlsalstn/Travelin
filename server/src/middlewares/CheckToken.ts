@@ -3,6 +3,7 @@ import * as jwt from "jsonwebtoken";
 import jwtSecret from "../config/jwtSecret";
 
 export const checkToken = (req: Request, res: Response, next: NextFunction) => {
+    console.log("CheckToken");
     const token = <string>req.headers["token"];
     let jwtPayload;
 
@@ -14,13 +15,14 @@ export const checkToken = (req: Request, res: Response, next: NextFunction) => {
         return;
     }
 
-    const { userId, name, nickName } = jwtPayload;
+    const { id, userId, name, nickName } = jwtPayload;
     const newToken = jwt.sign(
-        {userId, name, nickName},
+        {id, userId, name, nickName},
         jwtSecret.code,
         {expiresIn: "1h"}
     );
 
+    req.headers.userId = id;
     res.setHeader("token", newToken);
 
     next();
