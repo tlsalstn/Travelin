@@ -82,17 +82,17 @@ class Menu extends React.Component<Props, State> {
                     <div className="Menu-Bot-Tools">
                         <ul>
                             <li>
-                                <Link to={"/post/mypage"} title="My Page">
+                                <Link to={"/mypage"} title="My Page">
                                     <img src={"https://img.icons8.com/ios-glyphs/60/000000/user--v1.png"} alt={"MyPage"} />
                                 </Link>
                             </li>
                             <li>
-                                <Link to={"post/share"} title="Community">
+                                <Link to={"/post/share"} title="Community">
                                     <img src={"https://img.icons8.com/material/60/000000/google-groups.png"} alt={"Comunity"} />
                                 </Link>
                             </li>
                             <li>
-                                <Link to={"post/info"} title="Info">
+                                <Link to={"/info"} title="Info">
                                     <img src={"https://img.icons8.com/android/60/000000/info.png"} alt={"Info"} />
                                 </Link>
                             </li>
