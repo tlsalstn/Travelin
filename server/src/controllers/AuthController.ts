@@ -20,13 +20,9 @@ class AuthController {
         }
 
         try {
-            const user = {
-                userId,
-                password,
-                name
-            }
+            const user = userRepogitory.create({userId, password, name});
 
-            await userRepogitory.save(user);
+            await userRepogitory.insert(user);
             
             const result = {
                 status: 200
@@ -34,6 +30,7 @@ class AuthController {
 
             res.json(result);
         } catch (error) {
+            console.log(error);
             const result = {
                 status: 400,
                 message: "Duplicate id"
