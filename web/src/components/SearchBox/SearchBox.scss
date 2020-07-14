@@ -17,16 +17,24 @@
         input {
             padding: 0 10px;
             border: none;
-            width: 100%;
+            width: 90%;
             height: 100%;
             box-sizing: border-box;
             font-size: 2vh;
             outline: none;
         }
         button {
+            width: 10%;
+            height: 100%;
             padding: 0 5px;
             max-width: 30px;
             box-sizing: border-box;
+            img {
+                margin: 2px 0;
+                padding: 5px 0;
+                width: 100%;
+                box-sizing: border-box;
+            }
         }
     }
 }

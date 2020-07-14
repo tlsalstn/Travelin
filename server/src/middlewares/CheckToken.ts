@@ -11,18 +11,24 @@ export const checkToken = (req: Request, res: Response, next: NextFunction) => {
         jwtPayload = <any>jwt.verify(token, jwtSecret.code);
         res.locals.jwtPayload = jwtPayload;
     } catch (error) {
-        res.status(401).send();
+        const result = {
+            status: 401,
+            message: "Token expired"
+        }
+        
+        res.send(result);
         return;
     }
 
-    const { id, userId, name, nickName } = jwtPayload;
+    const { id, userId, name} = jwtPayload;
     const newToken = jwt.sign(
-        {id, userId, name, nickName},
+        {id, userId, name},
         jwtSecret.code,
         {expiresIn: "1h"}
     );
 
-    req.headers.userId = id;
+    req.headers.id = id;
+    req.headers.userId = userId;
     res.setHeader("token", newToken);
 
     next();

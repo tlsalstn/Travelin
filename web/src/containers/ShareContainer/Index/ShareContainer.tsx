@@ -47,7 +47,7 @@ class ShareContainer extends React.Component<Props, State> {
                                     <div className="ShareContainer-List-Wrap-Content-Item">
                                         <div className="ShareContainer-List-Wrap-Content-Item-Number">{item.id}</div>
                                         <div className="ShareContainer-List-Wrap-Content-Item-Title">
-                                            <a href={"/post/share/" + item.id}>{item.title}</a>
+                                            <Link to={"/post/share/" + item.id}>{item.title}</Link>
                                         </div>
                                         <div className="ShareContainer-List-Wrap-Content-Item-Author">{item.userId.name}</div>
                                         <div className="ShareContainer-List-Wrap-Content-Item-Created">{time}</div>

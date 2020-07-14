@@ -2,7 +2,6 @@ import { Router } from "express";
 import user from "./user";
 import places from "./places";
 import bulletin from "./bulletin";
-import { checkToken } from "../middlewares/CheckToken";
 
 const router = Router();
 

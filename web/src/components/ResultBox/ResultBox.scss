@@ -1,0 +1,38 @@
+.ResultBox {
+    padding: 0 10px;
+    text-align: left;
+    p {
+        margin: 0;
+    }
+    &-Name {
+        padding-top: 10px;
+        font-size: 30px;
+    }
+    &-Address {
+        height: 100%;
+        font-size: 13px;
+    }
+    &-Website {
+        font-size: 13px;
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+    &-Weather {
+        display: flex;
+        &-Img {
+            padding-right: 10px;
+            width: 50px;
+            height: 100%;
+        }
+        &-Info {
+            &-Temp {
+                font-size: 20px;
+            }
+            &-Weather {
+                font-size: 16px;
+            }
+        }
+    }
+}

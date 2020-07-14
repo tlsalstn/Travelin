@@ -19,6 +19,7 @@ export class WeatherStore {
                     q
                 }
             });
+            console.log(result);
 
             result.data.main.temp -= 273;
             result.data.main.temp_max -= 273;
@@ -28,6 +29,7 @@ export class WeatherStore {
             this.setData(result.data);
         } catch (error) {
             console.log(error);
+            this.setData([]);
         }
     }
 }

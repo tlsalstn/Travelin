@@ -91,11 +91,6 @@ class Menu extends React.Component<Props, State> {
                                     <img src={"https://img.icons8.com/material/60/000000/google-groups.png"} alt={"Comunity"} />
                                 </Link>
                             </li>
-                            <li>
-                                <Link to={"/info"} title="Info">
-                                    <img src={"https://img.icons8.com/android/60/000000/info.png"} alt={"Info"} />
-                                </Link>
-                            </li>
                         </ul>
                     </div>
                 </div>

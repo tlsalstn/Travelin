@@ -6,5 +6,7 @@ const router = Router();
 
 router.post("/createShare", checkToken, ShareController.createPost);
 router.get("/getShare", ShareController.getPosts);
+router.get("/getMyShare", checkToken, ShareController.getMyPosts);
+router.delete("/remove", ShareController.remove);
 
 export default router;

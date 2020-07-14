@@ -19,7 +19,7 @@ interface State {
 @inject("store")
 @observer
 class Map extends React.Component<Props, State> {
-    async componentDidMount() {
+    componentDidMount() {
         const { initMap } = this.props.store.mapStore;
         const container = document.getElementById("map");
 

@@ -12,7 +12,7 @@ interface Props {
     register(): any;
 }
 
-const Register: React.SFC<Props> = ({ id, password, name, nickName, email, handleChange, register }) => {
+const Register: React.SFC<Props> = ({ id, password, name, handleChange, register }) => {
     const handleClick = async () => {
         const data = await register();
 

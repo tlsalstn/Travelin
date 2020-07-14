@@ -53,7 +53,7 @@ class MainContainer extends React.Component {
                                     <p>No Copyright</p>
                                 </div>
                                 <div className="MainContainer-Main-Bg-Container-Info-Link">
-                                    <Link to="https://github.com/QMCHE/Travelin" target="_blank" rel="noopener noreferrer"><img src={Github} alt="GitHub" title="GitHub" /></Link>
+                                    <a href="https://github.com/QMCHE/Travelin" target="_blank" rel="noopener noreferrer"><img src={Github} alt="GitHub" title="GitHub" /></a>
                                 </div>
                             </div>
                         </div>

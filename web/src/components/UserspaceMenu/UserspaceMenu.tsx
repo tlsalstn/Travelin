@@ -9,7 +9,7 @@ const UserspaceMenu: React.SFC = () => {
     return (
         <ul>
             <li>
-                <Link to="/">MY PAGE</Link>
+                <Link to="/mypage">MY PAGE</Link>
             </li>
             <li>
                 <Link to="/" onClick={() => logout()}>LOGOUT</Link>

@@ -5,10 +5,10 @@ import { User } from "../entity/User";
 
 class ShareController {
     static createPost = async (req: Request, res: Response) => {
-        const { userId }: any = req.headers;
+        const { id }: any = req.headers;
         const { title, content, points }: Share = req.body;
 
-        if (!(userId && title && content && points)) {
+        if (!(id && title && content && points)) {
             const result = {
                 status: 400,
                 message: "Please enter all the information"
@@ -21,7 +21,7 @@ class ShareController {
         const shareRepository = getRepository(Share);
 
         try {
-            const share = shareRepository.create({ userId, title, content, points });
+            const share = shareRepository.create({ userId: id, title, content, points });
 
             const post = await shareRepository.insert(share);
 
@@ -37,6 +37,43 @@ class ShareController {
         }
     }
 
+    static getMyPosts = async (req: Request, res: Response) => {
+        const { id } = req.headers;
+        const shareRepository = getRepository(Share);
+
+        console.log(id);
+        try {
+            const share = await shareRepository.createQueryBuilder("share").where({userId: id}).orderBy("id", "DESC").getMany();
+            const result = {
+                status: 200,
+                data: share
+            }
+
+            res.send(result);
+        } catch (error) {
+            console.log(error);
+            res.send();
+        }
+    }
+
+    static remove = async (req: Request, res: Response) => {
+        const { id } = req.query;
+        const shareRepository = getRepository(Share);
+
+        try {
+            await shareRepository.createQueryBuilder("share").delete().from(Share).where("id = :id", {id}).execute();
+
+            const result = {
+                status: 200,
+                message: "Success"
+            }
+            res.send(result);
+        } catch (error) {
+            console.log(error);
+            res.send();
+        }
+    }
+
     static getPosts = async (req: Request, res: Response) => {
         const { id } = req.query;
         const shareRepository = getRepository(Share);
@@ -44,7 +81,7 @@ class ShareController {
         try {
             let posts = null;
             if(!id) {
-                posts = await shareRepository.createQueryBuilder("share").leftJoinAndSelect("share.userId", "user").getMany();
+                posts = await shareRepository.createQueryBuilder("share").leftJoinAndSelect("share.userId", "user").orderBy("share_id", "DESC").getMany();
             } else {
                 posts = await shareRepository.createQueryBuilder("share").leftJoinAndSelect("share.userId", "user").where("share.id = :id", {id: id}).getOne();
             }

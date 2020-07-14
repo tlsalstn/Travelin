@@ -57,21 +57,72 @@ export class PostStore {
         }
     }
 
-    @action createPost = async (title: string, content: string, points: string) => {
-        const result = await Axios({
-            method: "POST",
-            url: address.localhost + "/post/createShare",
-            headers: {
-                token: window.localStorage.getItem("token")
-            },
-            data: {
-                title,
-                content,
-                points
+    @action remove = async (id: number) => {
+        try {
+            const result = await Axios({
+                method: "DELETE",
+                url: address.localhost + "/post/remove",
+                params: {
+                    id
+                }
+            });
+
+            console.log(result);
+            if(result.data.status) {
+                alert("Success");
+                window.location.href = "/mypage";
+            } else {
+                alert("Fail");
             }
-        });
-        
-        if(result.data.data.status === 200) return true;
-        return false;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    @action getMyPosts = async () => {
+        try {
+            const result = await Axios({
+                method: "GET",
+                url: address.localhost + "/post/getMyShare",
+                headers: {
+                    token: window.localStorage.getItem("token")
+                }
+            });
+
+            console.log(result);
+            if(result.data.status === 200) {
+                this.posts = result.data.data;
+            } else if(result.data.status === 401) {
+                alert("Token expired");
+                window.localStorage.clear();
+                window.location.href = "/auth/login";
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    @action createPost = async (title: string, content: string, points: string) => {
+        try {
+            const result = await Axios({
+                method: "POST",
+                url: address.localhost + "/post/createShare",
+                headers: {
+                    token: window.localStorage.getItem("token")
+                },
+                data: {
+                    title,
+                    content,
+                    points
+                }
+            });
+
+            console.log(result);
+            
+            return result.data.status === 200
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
     }
 }

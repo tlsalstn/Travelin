@@ -13,6 +13,7 @@ interface Map {
     addListener?: any;
     getBounds?: any;
     panTo?: any;
+    setZoom?: any;
 }
 
 interface Center {
@@ -102,9 +103,14 @@ export class MapStore {
         this.map.panTo(new window.google.maps.LatLng(lat, lng));
     }
 
+    @action setZoom = (level: number) => {
+        this.map.setZoom(level);
+    }
+
     // 마커 추가
-    @action addMarker = (lat: number, lng: number, title: string = "Marker") => {
+    @action addMarker = (lat: number, lng: number, title: string = "Marker", level: number) => {
         this.moveTo(lat, lng);
+        this.setZoom(level);
 
         if (this.marker) this.marker.setMap(null);
 
@@ -116,24 +122,32 @@ export class MapStore {
     }
 
     // 길 생성
-    @action directions = async (travelMode: string, points: Waypoints[] = this.points) => {
-        this.directionsService.route({
+    @action directions = async (travelMode: string, points: Waypoints[] = this.points): Promise<boolean> => {
+        let isSuccess: boolean = false;
+        let test = points;
+        console.log(test);
+
+        await this.directionsService.route({
             origin: points[0].location,
-            destination: points[this.points.length - 1].location,
-            waypoints: points.slice(1, this.points.length - 1).map(item => {
+            destination: points[points.length - 1].location,
+            waypoints: points.slice(1, points.length - 1).map(item => {
                 return {
                     location: item.location
                 }
             }),
             travelMode: travelMode
-        }, (response: object, status: string): void => {
+        }, (response: object, status: string) => {
             console.log(response);
             if (status === "OK") {
                 this.directionsRenderer.setDirections(response);
+                isSuccess = true;
             } else {
                 alert("No way found");
+                isSuccess = false;
             }
         });
+
+        return isSuccess;
     }
 
     // 경유지 추가

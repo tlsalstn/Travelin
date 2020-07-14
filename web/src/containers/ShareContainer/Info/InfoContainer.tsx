@@ -21,7 +21,8 @@ class InfoContainer extends React.Component<Props, State> {
         const container = document.getElementById("map1");
 
         const post = await getPost(id);
-        const mapInfo = JSON.parse(post.points);
+        console.log(JSON.parse(post.points));
+        const mapInfo = await JSON.parse(post.points);
         load(container, mapInfo.travelMode, mapInfo.points);
     }
 

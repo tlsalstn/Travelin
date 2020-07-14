@@ -1,17 +1,11 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { User } from "../entity/User";
-import * as colors from "colors";
 
 class UserController {
     static getUser = async (req: Request, res: Response) => {
-        console.log(colors.green("GetUsers API Request"));
-        console.log(colors.gray("Method: " + req.method));
-        console.log(colors.gray("OriginalURL: " + req.originalUrl));
-
-        if(req.query.userId === undefined) {
+        if(req.headers.userId === undefined) {
             const message: String = "userId가 없습니다.";
-            console.log(message);
 
             const result = {
                 status: 400,
@@ -29,11 +23,9 @@ class UserController {
         try {
             user = await userRepository.findOneOrFail({
                 where: [
-                    {userId: req.query.userId}
+                    {userId: req.headers.userId}
                 ]
             });
-
-            console.log(user);
 
             const result = {
                 status: 200,
@@ -41,10 +33,9 @@ class UserController {
             }
 
             res.status(200).json(result);
+            return;
         } catch (error) {
             const message: String = "일치하는 유저가 없습니다.";
-
-            console.log(error.name);
 
             const result = {
                 status: 401,
@@ -52,15 +43,11 @@ class UserController {
             }
 
             res.json(result);
+            return;
         }
     }
     
     static getUsers = async (req: Request, res: Response) => {
-        console.log(colors.green("GetUsers API Request"));
-        console.log(colors.gray("Method: " + req.method));
-        console.log(colors.gray("OriginalURL: " + req.originalUrl));
-
-        let result;
         let users: User[];
         const userRepository = getRepository(User);
 
@@ -72,18 +59,16 @@ class UserController {
                 data: users
             }
 
-            console.log(users);
-
             res.json(result);
+            return;
         } catch (error) {
             const result = {
                 status: 500,
                 message: error
             }
-            
-            console.log(error);
 
             res.json(result);
+            return;
         }
     }
 }

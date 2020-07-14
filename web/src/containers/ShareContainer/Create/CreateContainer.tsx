@@ -44,17 +44,20 @@ class CreateContainer extends Component<Props, State> {
         
         const handleChange = (e: ChangeEvent<HTMLSelectElement>) => this.setState({travelMode: e.currentTarget.value});
 
-        const create = () => {
-            console.log(window.localStorage.getItem("token"));
+        const create = async () => {
             if(window.localStorage.getItem("token") === null) {
                 alert("Login is required");
                 return;
-            }
-            if(!directions(this.state.travelMode)) {
+            } else if(this.state.title === "" || this.state.content === "") {
+                alert("Please enter title and content");
+                return;
+            } else if(!directions(this.state.travelMode)) {
                 alert("Map directions error");
                 return;
             }
-            const result = createPost(this.state.title, this.state.content, JSON.stringify({"travelMode": this.state.travelMode, "points": points}));
+
+            const result = await createPost(this.state.title, this.state.content, JSON.stringify({"travelMode": this.state.travelMode, "points": points}));
+            console.log(result);
             if(result) {
                 alert("Success");
                 window.location.href = "/post/share"

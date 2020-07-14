@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from "react";
-import { observable } from "mobx";
+import { observable, action } from "mobx";
 import Axios from "axios";
+import { address } from "../config/adrs.json";
 
 interface Login {
     id: string;
@@ -21,7 +22,7 @@ export class LoginStore {
         password: ""
     }
 
-    inputChange = (type: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    @action inputChange = (type: string, e: React.ChangeEvent<HTMLInputElement>) => {
         if(type === "id") {
             this.values.id = e.currentTarget.value;
         } else if(type === "password") {
@@ -55,7 +56,7 @@ export class RegisterStore {
         name: ""
     }
 
-    inputChange = (type: string, e: ChangeEvent<HTMLInputElement>) => {
+    @action inputChange = (type: string, e: ChangeEvent<HTMLInputElement>) => {
         if(type === "id") {
             this.values.id = e.currentTarget.value;
         } else if(type === "password") {
@@ -80,6 +81,32 @@ export class RegisterStore {
             return this.data.data;
         } catch (error) {
             console.log(error);
+        }
+    }
+}
+
+export class InfoStore {
+    @observable info = {};
+
+    @action getInfo = async () => {
+        try {
+            const result = await Axios({
+                method: "GET",
+                url: address.localhost + "/user/getUser",
+                headers: {
+                    token: window.localStorage.getItem("token")
+                }
+            });
+    
+            if(result.data.status === 200) {
+                this.info = result.data.data;
+            } else if(result.data.status === 401) {
+                alert("세션이 만료되었습니다.");
+                window.localStorage.clear();
+                window.location.href = "/auth/login";
+            }
+        } catch (error) {
+            
         }
     }
 }
